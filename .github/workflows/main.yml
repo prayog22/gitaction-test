@@ -1,0 +1,29 @@
+name: Create EC2 Instance
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create-ec2-instance:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Assume IAM Role
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::337587283130:policy/codebuildpocily
+          aws-region: your-aws-region
+
+      - name: Create EC2 Instance
+        run: |
+          aws ec2 run-instances \
+            --image-id ami-053b0d53c279acc90 \
+            --instance-type t2.micro \
+            --subnet-id subnet-068270b73d3f0af7c \
+            --security-group-ids sg-0930d9f79f18a1c28 \
+            --key-name Tools
